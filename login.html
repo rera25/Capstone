@@ -18,7 +18,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: url('clean.png') center/cover no-repeat;
+      background: url('Login bg.png') center/cover no-repeat;
       position: relative;
     }
 
@@ -27,8 +27,6 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(255,255,255,0.6);
-      backdrop-filter: blur(4px);
       z-index: 0;
     }
 
@@ -46,16 +44,21 @@
     }
 
     /* Login box */
-    .login-box {
-      position: relative;
-      z-index: 2;
-      background: rgba(240, 248, 255, 0.9);
-      padding: 2rem;
-      border-radius: 15px;
-      width: 320px;
-      text-align: center;
-      box-shadow: 0px 4px 20px rgba(0,0,0,0.25);
-    }
+.login-box {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom, /* vertical gradient */
+    rgba(135, 206, 235, 0.65) 0%,    /* Sky blue at top */
+    rgba(224, 255, 255, 0.65) 70%,    /* Pale blue in the middle */
+    rgba(255, 255, 255, 0.7) 100%    /* White at bottom */
+  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* Safari support */
+  padding: 2rem;
+  width: 400px;
+  text-align: center;
+}
 
     .login-box img {
       width: 100px;
@@ -135,15 +138,6 @@
 </style>
 </head>
 <body>
-
-<!-- Waves -->
-<svg class="wave-top" viewBox="0 0 1440 320">
-  <path fill="#7df2f5" fill-opacity="0.4" d="M0,64L48,85.3C96,107,192,149,288,144C384,139,480,85,576,80C672,75,768,117,864,149.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,0L0,0Z"></path>
-</svg>
-
-<svg class="wave-bottom" viewBox="0 0 1440 320">
-  <path fill="#7df2f5" fill-opacity="0.4" d="M0,64L48,85.3C96,107,192,149,288,144C384,139,480,85,576,80C672,75,768,117,864,149.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,0L0,0Z"></path>
-</svg>
 
 <!-- Login Box -->
 <div class="login-box">
