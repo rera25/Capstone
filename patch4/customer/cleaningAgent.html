@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Information - Al Ayadi Al Sarea Cleaning Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans', sans-serif;
+        }
+
+.option.selected {
+  background: #28a745 !important; /* green */
+  color: #fff;
+}
+
+/* Cleaning Agent Options */
+.cleaning-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 60px 0 40px 0;
+}
+
+.option {
+  background: #5a6dbd;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+  text-align: center;
+}
+
+.option:hover {
+  background: #3535b0;
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+}
+
+/* Chat bubble tooltip facing right */
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 105%;   /* move to the right of button */
+  transform: translateY(-50%);
+  background: #fff;
+  color: #000;
+  padding: 12px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  line-height: 1.4;
+  max-width: 300px;
+  text-align: left;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  border: 2px solid #000; /* outline like comic bubble */
+}
+
+/* Tail pointing right */
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -12px; /* attach to left side */
+  transform: translateY(-50%);
+  border-width: 10px 12px 10px 0;
+  border-style: solid;
+  border-color: transparent #fff transparent transparent;
+  /* add black outline */
+  filter: drop-shadow(-2px 0px 0px #000);
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+        /* Body Background with overlay */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: url('back.jpg') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            z-index: -1;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 7%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        /* Logo */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-text-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2764d4;
+        }
+
+        .logo-text .highlight {
+            color: #FFD94C;
+        }
+
+        .logo-text .high {
+            color: #D32F2F;
+        }
+
+        .logo-subtext {
+            font-size: 14px;
+            color: #000;
+        }
+
+        /* Navigation */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .navlist {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .navlist a {
+            color: #002366;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .navlist a.active {
+            background-color: #FFD94C;
+            color: #002366;
+        }
+
+        .navlist a:hover {
+            background-color: rgba(255, 217, 76, 0.15);
+            color: #FFD94C;
+        }
+
+        /* Search */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: transparent;
+            padding: 10px 20px;
+            border-radius: 40px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+            transition: width 0.5s ease-in-out;
+            width: 150px;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            font-size: 13px;
+            background-color: transparent;
+            color: #000;
+            width: 100%;
+        }
+
+        .search-bar i {
+            cursor: pointer;
+            font-size: 16px;
+            color: #2764d4;
+        }
+
+        /* Booking Information Section */
+        .booking-section {
+            flex: 1;
+            padding-top: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .booking-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 900px;
+            width: 100%;
+			margin-top: 100px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            display: flex;
+			backdrop-filter: blur(0.1px);
+			
+        }
+
+        /* Left Sidebar */
+        .booking-details {
+            width: 200px;
+            background: #3535B0;
+            border-radius: 12px;
+            color: white;
+            padding: 10px 0;
+            list-style: none;
+        }
+
+        .booking-details li {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .booking-details li:first-child {
+            background-color: #3535B0;
+            color: #89FF1F;
+            font-weight: bold;
+        }
+		
+		/* Date & Time (2nd item) */
+        .booking-details li:nth-child(2) {
+           color: #89FF1F;   /* green */
+           font-weight: bold;
+        }
+
+        /* Type of Cleaning (3rd item) */
+        .booking-details li:nth-child(3) {
+           color: #89FF1F;      /* black */
+           font-weight: bold;
+        }
+		
+        .booking-details li i {
+            margin-right: 10px;
+        }
+
+        /* Right Form Section */
+        .booking-form {
+            flex: 1;
+            padding-left: 20px;
+        }
+
+        .booking-form h2 {
+            margin-bottom: 10px;
+            color: #002366;
+        }
+
+        .booking-form label {
+            font-weight: bold;
+            display: block;
+            margin-top: 12px;
+            color: #002366;
+        }
+
+        .booking-form input,
+        .booking-form select {
+            width: 100%;
+            padding: 8px 12px;
+            margin-top: 4px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        .btn-row {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end; /* push to the right */
+            gap: 10px; /* remove space between buttons */
+        }
+
+        .btn {
+           padding: 8px 20px;
+           border: none;
+           cursor: pointer;
+           font-weight: bold;
+           border-radius: 20px; /* remove radius so they align flush */
+        }
+
+        .btn-back {
+           background: #242478;
+           color: white;
+           border-radius: 10px; /* round only left corners */
+        }
+
+        .btn-next {
+           background: #3535B0;
+           color: #fff;
+           border-radius: 10px; /* round only right corners */
+       }
+
+        /* Footer at real bottom */
+        .footer {
+            background-color: #002244;
+            color: white;
+            text-align: center;
+            padding: 15px 10px;
+            margin-top: auto;
+        }
+
+        .footer p {
+            font-size: 14px;
+        }
+		
+		.btn-next:disabled {
+            opacity: 0.5;  /* makes it look faded */
+            cursor: not-allowed; /* change mouse cursor */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <div class="logo-container">
+        <img src="logo.png" alt="logo" class="logo-img">
+        <div class="logo-text-group">
+            <span class="logo-text">
+                Al Ayadi <span class="highlight">Al</span> <span class="high">Sarea</span>
+            </span>
+            <span class="logo-subtext">Cleaning Services</span>
+        </div>
+    </div>
+
+    <div class="nav-right">
+        <ul class="navlist">
+            <li><a href="#" class="" onclick =" home()">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Contact Us</a></li>
+        </ul>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+            <i class="bx bx-search"></i>
+        </div>
+    </div>
+</header>
+
+<!-- Booking Section -->
+<section class="booking-section">
+  <div class="booking-card">
+    <!-- Sidebar -->
+    <ul class="booking-details">
+      <li><i class="bx bx-user"></i> Customer Details</li>
+      <li><i class="bx bx-calendar"></i> Date & Time</li>
+      <li><i class="bx bx-brush"></i> Type of Cleaning</li>
+      <li style="color:#000; font-weight:bold;">
+        <i class="bx bx-group"></i> Preferred Cleaning Agents
+      </li>
+      <li><i class="bx bx-edit-alt"></i> Special Requests</li>
+      <li><i class="bx bx-receipt"></i> Billing Summary</li>
+      <li><i class="bx bx-check-circle"></i> Booking Confirmation</li>
+    </ul>
+
+    <!-- Right Form -->
+    <div class="booking-form">
+      <h2>Cleaning Agents</h2>
+      <p>Select preferred cleaning agents:</p>
+
+      <div class="cleaning-options">
+        <button class="option tooltip">All-Purpose Cleaners <span class="tooltip-text"> For general surface cleaning.</span> </button>
+        <button class="option tooltip">Disinfectants  <span class="tooltip-text"> To kill germs and bacteria, especially in kitchens and bathrooms.</span> </button>
+        <button class="option tooltip">Glass Cleaners  <span class="tooltip-text"> For streak-free windows and mirrors.</span></button>
+        <button class="option tooltip">Degreasers <span class="tooltip-text"> To remove grease and oil from kitchen surfaces.</span></button>
+        <button class="option tooltip">Floor Cleaners <span class="tooltip-text"> For tile, wood, or vinyl floors.</span></button>
+        <button class="option tooltip">Bathroom Cleaners <span class="tooltip-text"> Specialized for removing soap scum, limescale, and stains.</span></button>
+        <button class="option tooltip">Carpet & Upholstery Cleaners <span class="tooltip-text"> For spot cleaning and stain removal.</span></button>
+        <button class="option tooltip">Eco-Friendly Solutions  <span class="tooltip-text"> Non-toxic, biodegradable products safe for kids and pets.</span></button>
+        <button class="option tooltip">Abrasive Cleaners  <span class="tooltip-text"> For scrubbing stubborn dirt on tough surfaces like tiles and grout.</span></button>
+        <button class="option tooltip">Acidic Cleaners <span class="tooltip-text"> To remove mineral deposits, rust, or limescale (used carefully).</span></button>
+        <button class="option tooltip">Enzyme-Based Cleaners <span class="tooltip-text"> For breaking down organic stains and odors, especially in kitchens and pet areas.</span></button>
+        <button class="option tooltip">Polishes <span class="tooltip-text"> For shining and protecting wood, metal, or stone surfaces.</span> </button>
+        <button class="option tooltip">Odor Neutralizers / Air Fresheners <span class="tooltip-text"> To leave spaces smelling fresh.</span></button>
+        <button class="option tooltip">Mold & Mildew Removers <span class="tooltip-text"> For sanitizing damp areas like bathrooms.</span></button>		
+        <button class="option tooltip">Wood Conditioners <span class="tooltip-text"> To maintain and protect wood furniture and floors.</span></button>	
+		<button class="option tooltip">Floor Waxes <span class="tooltip-text"> For shine and protection on vinyl or hardwood floors.</span></button>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-back" href = "#" onclick = "assist1()">Back</button>
+        <button class="btn btn-next" href = "#" onclick = "reques()">Next</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2025 Al Ayadi Al Sarea Cleaning Services. All Rights Reserved.</p>
+</footer>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<script>
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "test-81103.firebaseapp.com",
+  databaseURL: "https://test-81103-default-rtdb.firebaseio.com",
+  projectId: "test-81103",
+  storageBucket: "test-81103.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const materialsRef = db.ref('materials');
+const userSelectionsRef = db.ref('userSelections/USER_ID'); // replace USER_ID with real user ID
+
+const options = document.querySelectorAll(".option");
+
+// Load previous selections
+window.addEventListener("DOMContentLoaded", async () => {
+  const snapshot = await userSelectionsRef.once('value');
+  const savedSelections = snapshot.val() || [];
+  options.forEach(btn => {
+    const name = btn.innerText.trim();
+    if (savedSelections.includes(name)) btn.classList.add("selected");
+  });
+});
+
+// Toggle selection UI only
+options.forEach(btn => {
+  btn.addEventListener("click", () => {
+    btn.classList.toggle("selected");
+  });
+});
+
+// Handle stock deduction and saving on Next
+document.querySelector(".btn-next").addEventListener("click", () => {
+  const selectedAgents = Array.from(document.querySelectorAll(".option.selected"))
+    .map(el => el.innerText.trim());
+
+  // Deduct stock for selected agents
+  selectedAgents.forEach(name => {
+    materialsRef.orderByChild("name").equalTo(name).once("value", snapshot => {
+      snapshot.forEach(child => {
+        const key = child.key;
+        materialsRef.child(key).transaction(currentData => {
+          if (currentData) {
+            if (currentData.stockQty > 0) {
+              currentData.stockQty -= 1;
+            } else {
+              alert(`${name} is out of stock!`);
+              // Remove from selection UI if out of stock
+              document.querySelectorAll(".option").forEach(btn => {
+                if (btn.innerText.trim() === name) btn.classList.remove("selected");
+              });
+              return; // abort transaction
+            }
+          }
+          return currentData;
+        });
+      });
+    });
+  });
+
+  // Save user's selections
+  userSelectionsRef.set(selectedAgents);
+
+  // Call your existing next function
+  reques();
+});
+
+// Update stock tooltips and disable buttons if stock = 0
+materialsRef.on('value', snapshot => {
+  const data = snapshot.val();
+  options.forEach(btn => {
+    const name = btn.innerText.trim();
+    for (const key in data) {
+      if (data[key].name === name) {
+        const qty = data[key].stockQty;
+        btn.title = "Stock left: " + qty;
+        btn.disabled = qty <= 0 && !btn.classList.contains("selected");
+      }
+    }
+  });
+});
+</script>
+
+
+
+<script src="home.js"></script>
+<script src="assist1.js"></script>
+<script src="reques.js"></script>
+<!-- Firebase SDK -->
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Information - Al Ayadi Al Sarea Cleaning Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans', sans-serif; }
+
+    body { display: flex; flex-direction: column; min-height: 100vh; background: url('back.jpg') no-repeat center center; background-size: cover; background-attachment: fixed; position: relative; margin: 0; /* reset margin */}
+    body::before {
+      content: "";
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.6);
+      z-index: -1;
+    }
+
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 7%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+    .logo-container { display: flex; align-items: center; gap: 15px; }
+    .logo-img { height: 60px; width: auto; object-fit: contain; }
+    .logo-text-group { display: flex; flex-direction: column; align-items: flex-start; }
+    .logo-text { font-size: 24px; font-weight: 800; color: #2764d4; }
+    .logo-text .highlight { color: #FFD94C; }
+    .logo-text .high { color: #D32F2F; }
+    .logo-subtext { font-size: 14px; color: #000; }
+
+    .nav-right { display: flex; align-items: center; gap: 15px; }
+    .navlist { display: flex; gap: 20px; list-style: none; }
+    .navlist a {
+      color: #002366; font-weight: 600; font-size: 16px;
+      padding: 8px 12px; border-radius: 20px; transition: 0.3s; text-decoration: none;
+    }
+    .navlist a.active { background-color: #FFD94C; color: #002366; }
+    .navlist a:hover { background-color: rgba(255, 217, 76, 0.15); color: #FFD94C; }
+
+    .search-bar {
+      display: flex; align-items: center; background-color: transparent;
+      padding: 10px 20px; border-radius: 40px; box-shadow: 0 0 10px rgba(0,0,0,0.08);
+      transition: width 0.5s ease-in-out; width: 150px;
+    }
+    .search-bar input { border: none; outline: none; font-size: 13px; background-color: transparent; color: #000; width: 100%; }
+    .search-bar i { cursor: pointer; font-size: 16px; color: #2764d4; }
+
+    .booking-section { flex: 1; /* make booking-section take remaining space */ padding-top: 120px; display: flex;  justify-content: center;  align-items: flex-start;}
+	
+    .booking-card { background: rgba(255, 255, 255, 0.9); border-radius: 12px; padding: 20px; max-width: 1200px;   /* wider container */ width: 100%; margin-top: 100px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); display: flex;}
+        .booking-details {
+            width: 200px; background: #3535B0;
+            border-radius: 12px; color: white;
+            padding: 10px 0; list-style: none;
+        }
+        .booking-details li {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            font-size: 14px; display: flex; align-items: center;
+        }
+        .booking-details li:first-child { background-color: #3535B0; color: #89FF1F; font-weight: bold; }
+        .booking-details li i { margin-right: 10px; }
+
+        .booking-details li:nth-child(2) {
+            color: #89FF1F;
+            font-weight: bold;
+        }
+		
+        .booking-details li:nth-child(3) {
+            color: #89FF1F;
+            font-weight: bold;
+        }
+		
+		.booking-details li:nth-child(4) {
+            color: black;
+            font-weight: bold;
+        }
+
+    .booking-form { flex: 1; padding-left: 20px; }
+    .booking-form h2 { margin-bottom: 10px; color: #002366; }
+    .booking-form label { font-weight: bold; display: block; margin-top: 12px; color: #002366; }
+
+    .form-columns {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* Service cards */
+    .service-options {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+	  width: 1000px;
+    }
+    .service-card {
+      flex: 1;
+      min-width: 200px;
+      text-align: center;
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+    .service-card:hover {
+       transform: translateY(-5px);
+    }
+	
+	.service-card:active {
+       background-color: #e6c200;   /* darker yellow when pressed */
+       transform: translateY(0);    /* remove lift when pressed */
+    }
+	
+	.service-card.selected {
+  background-color: #FFD94C;
+}
+    .service-card img {
+       width: 80px;                 /* control image size */
+       height: 80px;
+       object-fit: contain;
+       margin-bottom: 15px;
+    }
+	
+	.back-card {
+        background: #3535B0;
+        color: white;
+        display: flex;
+        flex-direction: column;   /* arrow above text */
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        border-radius: 12px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+    .back-card:hover {
+        background: #242478;
+        transform: translateY(-5px); /* same hover lift as other cards */
+    }
+
+    .back-card .arrow {
+        font-size: 22px;
+        margin-bottom: 10px;
+    }	
+	.back-card .text {
+        font-size: 15px;
+        text-transform: uppercase;
+    }
+
+    .btn-row { margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px; }
+    .btn { padding: 8px 20px; border: none; cursor: pointer; font-weight: bold; border-radius: 10px; }
+    .btn-back { background: #242478; color: white; }
+    .btn-next { background: #3535B0; color: #fff; }
+
+    .footer {background-color: #002244; color: white; text-align: center; padding: 15px 10px; margin-top: auto; flex-shrink: 0; }
+    .footer p { font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-container">
+    <img src="logo.png" alt="logo" class="logo-img">
+    <div class="logo-text-group">
+      <span class="logo-text">Al Ayadi <span class="highlight">Al</span> <span class="high">Sarea</span></span>
+      <span class="logo-subtext">Cleaning Services</span>
+    </div>
+  </div>
+  <div class="nav-right">
+    <ul class="navlist">
+      <li><a href="#" onclick="home()">Home</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">FAQ</a></li>
+      <li><a href="#">Contact Us</a></li>
+    </ul>
+    <div class="search-bar">
+      <input type="text" placeholder="Search...">
+      <i class="bx bx-search"></i>
+    </div>
+  </div>
+</header>
+
+<section class="booking-section">
+  <div class="booking-card">
+        <ul class="booking-details">
+            <li><i class="bx bx-user"></i> Customer Details</li>
+            <li><i class="bx bx-calendar"></i> Date & Time</li>
+            <li><i class="bx bx-brush"></i> Type of Cleaning</li>
+            <li><i class="bx bx-group"></i> Preferred Cleaning Agents</li>
+            <li><i class="bx bx-edit-alt"></i> Special Requests</li>
+            <li><i class="bx bx-receipt"></i> Billing Summary</li>
+            <li><i class="bx bx-check-circle"></i> Booking Confirmation</li>
+        </ul>
+
+    <div class="booking-form">
+      <h2>Services</h2>
+
+      <!-- Other Services -->
+      <h3>Other Home Assistance Services:</h3>
+      <div class="service-options">
+        <div class="service-card">
+          <img src="iron.png" alt="Ironing">
+          <h4>Ironing</h4>
+          <p>Ironing - AED 30 per hour</p>
+        </div>
+        <div class="service-card">
+          <img src="wipe.png" alt="Dusting">
+          <h4>Dusting and Polishing</h4>
+          <p>Package Price varies depending on the number of windows.</p>
+        </div>
+		<div class="service-card">
+          <img src="vacuum.png" alt="Vacuum">
+          <h4>Vacuuming</h4>
+          <p>Vacuum cleaning of carpets, surfaces, etc.</p>
+        </div>
+		<div class="service-card">
+          <img src="dusting.png" alt="Dusting">
+          <h4>Dusting and Polishing</h4>
+          <p>Dusting and Polishing of Furnitures.</p>
+        </div>
+	    <div class="service-card">
+          <img src="bed.png" alt="Bed">
+          <h4>Bed Tidy & Laundry Folding</h4>
+          <p>Making of beds and folding of laundry.</p>
+        </div>	
+	    <div class="service-card">
+          <img src="dish.png" alt="Bed">
+          <h4>Dish Washing</h4>
+          <p>Washing of dishes (if required by the client)</p>
+        </div>		
+	    <div class="service-card">
+          <img src="trash.png" alt="Bed">
+          <h4>Trash Removal</h4>
+          <p>Removal of trash from the interior trash containers and brough to the outdoor dumpster</p>
+        </div>		
+        <div class="service-card back-card" onclick="assist1()">
+          <h4>⇦⇦⇦</h4>
+           <p style="color:white;">Back</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>&copy; 2025 Al Ayadi Al Sarea Cleaning Services. All Rights Reserved.</p>
+</footer>
+
+<script>
+  const cards2 = document.querySelectorAll('.service-card:not(.back-card)');
+
+  // Restore selections if user comes back
+  const savedServices = JSON.parse(localStorage.getItem('otherServices')) || [];
+  cards2.forEach(card => {
+    if (savedServices.includes(card.querySelector('h4').innerText)) {
+      card.classList.add('selected');
+    }
+  });
+
+  cards2.forEach(card => {
+    card.addEventListener('click', () => {
+      card.classList.toggle('selected');
+
+      let selected = Array.from(document.querySelectorAll('.service-card.selected:not(.back-card)'))
+        .map(c => c.querySelector('h4').innerText);
+
+      // save to localStorage
+      localStorage.setItem('otherServices', JSON.stringify(selected));
+    });
+  });
+</script>
+
+<script src="home.js"></script>
+<script src="cal.js"></script>
+<script src="assist1.js"></script>
+</body>
+</html>
