@@ -1,0 +1,328 @@
+<!-- Save as dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Alayadi Alsarea</title>
+
+  <!-- Bootstrap & Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="inventory.css">
+</head>
+
+<body>
+  <div class="container-fluid">
+    <!-- Topbar -->
+    <div class="topbar d-flex justify-content-between align-items-center px-3 py-2 mb-0">
+      <div class="d-flex align-items-center gap-2 fw-bold">
+        <button id="toggleSidebar" class="hamburger"><span></span><span></span><span></span></button>
+        <div class="logo-container">
+          <img src="logo.png" alt="logo" class="logo-img">
+          <div class="logo-text-group">
+            <span class="logo-text">Al Ayadi <span class="highlight">Al</span> <span class="high">Sarea</span></span>
+            <span class="logo-subtext">Cleaning Services</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center">
+        <div class="search-box">
+          <input type="text" class="form-control" placeholder="Search...">
+          <i class="bi bi-search"></i>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center gap-3 me-3">
+        <a href="#" class="text-white fs-5"><i class="bi bi-bell-fill"></i></a>
+        <a href="#" class="text-white fs-5"><i class="bi bi-chat-left-dots-fill"></i></a>
+        <a href="#" class="text-white fs-5"><i class="bi bi-calendar-event-fill"></i></a>
+      </div>
+
+      <div class="dropdown">
+        <a class="text-white fw-semibold dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+          Admin 12345
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="#" onclick="logout()">Log Out</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="layout">
+      <nav id="sidebar" class="sidebar">
+        <div class="text-center mb-4 logo-box">
+          <h5 class="brand-name">Alayadi <span>Alsarea</span></h5>
+          <p class="tagline">Technical Services</p>
+        </div>
+        <a class="nav-link" href="#" onclick="home()"><i class="bi bi-house-door-fill"></i> Dashboard</a>
+        <a class="nav-link" href="#" onclick="book()"><i class="bi bi-calendar-check-fill"></i> Booking</a>
+        <a class="nav-link" href="#" onclick="emp()"><i class="bi bi-people-fill"></i> Employees</a>
+        <a class="nav-link" href="#" onclick="bill()"><i class="bi bi-receipt"></i> Billing</a>
+        <a class="nav-link active"><i class="bi bi-box-seam"></i> Inventory</a>
+        <a class="nav-link" href="#" onclick="rep()"><i class="bi bi-bar-chart-fill"></i> Reports & Analytics</a>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="d-flex align-items-center mb-3 px-3">
+          <i class="bi bi-house-door-fill me-2 fs-10" style="color: gray;"></i>
+          <span class="fw fs-10" style="color: gray;">Inventory Management</span>
+        </div>
+
+        <!-- Top Actions -->
+        <div class="d-flex justify-content-between align-items-center mb-3 px-3 flex-wrap gap-2">
+          <div class="flex-grow-1 position-relative search-box">
+            <input type="text" class="form-control" placeholder="Search materials...">
+            <i class="bi bi-search"></i>
+          </div>
+          <button class="btn btn-warning fw-semibold" data-bs-toggle="modal" data-bs-target="#addMaterialModal">
+            <i class="bi bi-plus-lg"></i> Add Material
+          </button>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row row-cols-1 row-cols-md-5 g-3 mb-3 px-3">
+          <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><h6>Total Materials</h6><h4>16</h4></div></div></div>
+          <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><h6>In Stock</h6><h4>1600</h4></div></div></div>
+          <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><h6>Low Stock</h6><h4>0</h4></div></div></div>
+          <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><h6>Auto-Deduct</h6><h4>6</h4></div></div></div>
+          <div class="col"><div class="card text-center shadow-sm"><div class="card-body"><h6>Total Value</h6><h4></h4></div></div></div>
+        </div>
+
+        <!-- Inventory Table -->
+        <div class="px-3">
+          <div class="table-responsive shadow-sm rounded">
+            <table class="table table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Material Name</th>
+                  <th>Category</th>
+                  <th>Stock Quantity</th>
+                  <th>Status</th>
+                  <th>Auto-Deduct</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- Firebase rows injected here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Add Material Modal -->
+        <div class="modal fade" id="addMaterialModal" tabindex="-1" aria-labelledby="addMaterialModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="addMaterialModalLabel">Add New Material</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <form id="addMaterialForm">
+                  <div class="mb-3">
+                    <label for="addMaterialName" class="form-label">Material Name</label>
+                    <input type="text" class="form-control" id="addMaterialName" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="addCategory" class="form-label">Category</label>
+                    <select class="form-select" id="addCategory" required>
+                      <option value="">Select Category</option>
+                      <option value="chemicals">Cleaning Chemicals</option>
+                      <option value="tools">Tools</option>
+                      <option value="consumables">Consumables</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="addStockQty" class="form-label">Stock Quantity</label>
+                    <input type="number" class="form-control" id="addStockQty" required>
+                  </div>
+                  <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="addAutoDeduct">
+                    <label class="form-check-label" for="addAutoDeduct">Auto-Deduct for Bookings</label>
+                  </div>
+                  <button type="submit" class="btn btn-warning w-100">Add Material</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Material Modal -->
+        <div class="modal fade" id="editMaterialModal" tabindex="-1" aria-labelledby="editMaterialModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="editMaterialModalLabel">Edit Material</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <form id="editMaterialForm">
+                  <div class="mb-3">
+                    <label for="editMaterialName" class="form-label">Material Name</label>
+                    <input type="text" class="form-control" id="editMaterialName" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="editCategory" class="form-label">Category</label>
+                    <select class="form-select" id="editCategory" required>
+                      <option value="">Select Category</option>
+                      <option value="chemicals">Cleaning Chemicals</option>
+                      <option value="tools">Tools</option>
+                      <option value="consumables">Consumables</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="editStockQty" class="form-label">Stock Quantity</label>
+                    <input type="number" class="form-control" id="editStockQty" required>
+                  </div>
+                  <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="editAutoDeduct">
+                    <label class="form-check-label" for="editAutoDeduct">Auto-Deduct for Bookings</label>
+                  </div>
+                  <button type="submit" class="btn btn-info w-100">Update Material</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const sidebar = document.getElementById("sidebar");
+const toggleButton = document.getElementById("toggleSidebar");
+if (localStorage.getItem("sidebarCollapsed") === "true") sidebar.classList.add("collapsed");
+toggleButton.addEventListener("click", () => {
+  sidebar.classList.toggle("collapsed");
+  localStorage.setItem("sidebarCollapsed", sidebar.classList.contains("collapsed"));
+});
+</script>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<script>
+// Firebase Config & Init
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "test-81103.firebaseapp.com",
+  databaseURL: "https://test-81103-default-rtdb.firebaseio.com",
+  projectId: "test-81103",
+  storageBucket: "test-81103.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const materialsRef = database.ref('materials');
+
+const tableBody = document.getElementById('tableBody');
+
+// Helper: table row
+function createTableRow(key, material) {
+  const statusBadge = material.stockQty > 10 ? '<span class="badge bg-success">In Stock</span>' : '<span class="badge bg-warning text-dark">Low Stock</span>';
+  const autoDeductText = material.autoDeduct ? "Yes" : "No";
+  return `
+    <tr id="${key}">
+      <td>${key}</td>
+      <td class="name">${material.name}</td>
+      <td class="category">${material.category}</td>
+      <td class="stockQty">${material.stockQty}</td>
+      <td class="status">${statusBadge}</td>
+      <td class="autoDeduct">${autoDeductText}</td>
+      <td>
+        <button class="btn btn-sm btn-primary" onclick="editMaterial('${key}')"><i class="bi bi-pencil-fill"></i></button>
+        <button class="btn btn-sm btn-danger" onclick="deleteMaterial('${key}')"><i class="bi bi-trash-fill"></i></button>
+        <button class="btn btn-sm btn-info"><i class="bi bi-clock-history"></i></button>
+      </td>
+    </tr>
+  `;
+}
+
+// Populate table
+materialsRef.on('value', snapshot => {
+  tableBody.innerHTML = '';
+  const data = snapshot.val();
+  if (data) Object.keys(data).forEach(key => tableBody.innerHTML += createTableRow(key, data[key]));
+});
+
+// ----------------- Add Material -----------------
+const addForm = document.getElementById('addMaterialForm');
+addForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const name = document.getElementById('addMaterialName').value.trim();
+  const category = document.getElementById('addCategory').value;
+  const stockQty = parseInt(document.getElementById('addStockQty').value);
+  const autoDeduct = document.getElementById('addAutoDeduct').checked;
+  if(!name || !category || isNaN(stockQty)) return alert("Fill all fields");
+  materialsRef.push({name, category, stockQty, autoDeduct, timestamp: Date.now()})
+    .then(() => {
+      addForm.reset();
+      bootstrap.Modal.getInstance(document.getElementById('addMaterialModal')).hide();
+    })
+    .catch(console.error);
+});
+
+// ----------------- Edit Material -----------------
+let currentEditKey = null;
+function editMaterial(key) {
+  currentEditKey = key;
+  const row = document.getElementById(key);
+  document.getElementById('editMaterialName').value = row.querySelector('.name').textContent;
+  document.getElementById('editCategory').value = row.querySelector('.category').textContent;
+  document.getElementById('editStockQty').value = row.querySelector('.stockQty').textContent;
+  document.getElementById('editAutoDeduct').checked = row.querySelector('.autoDeduct').textContent === "Yes";
+  new bootstrap.Modal(document.getElementById('editMaterialModal')).show();
+}
+
+document.getElementById('editMaterialForm').addEventListener('submit', e => {
+  e.preventDefault();
+  if (!currentEditKey) return;
+  const updatedData = {
+    name: document.getElementById('editMaterialName').value.trim(),
+    category: document.getElementById('editCategory').value,
+    stockQty: parseInt(document.getElementById('editStockQty').value),
+    autoDeduct: document.getElementById('editAutoDeduct').checked,
+    timestamp: Date.now()
+  };
+  materialsRef.child(currentEditKey).update(updatedData)
+    .then(() => {
+      const row = document.getElementById(currentEditKey);
+      row.querySelector('.name').textContent = updatedData.name;
+      row.querySelector('.category').textContent = updatedData.category;
+      row.querySelector('.stockQty').textContent = updatedData.stockQty;
+      row.querySelector('.status').innerHTML = updatedData.stockQty > 10 ? '<span class="badge bg-success">In Stock</span>' : '<span class="badge bg-warning text-dark">Low Stock</span>';
+      row.querySelector('.autoDeduct').textContent = updatedData.autoDeduct ? "Yes" : "No";
+      bootstrap.Modal.getInstance(document.getElementById('editMaterialModal')).hide();
+      currentEditKey = null;
+    })
+    .catch(console.error);
+});
+
+// ----------------- Delete Material -----------------
+function deleteMaterial(key) {
+  if (!confirm("Are you sure?")) return;
+  materialsRef.child(key).remove()
+    .then(() => { const row = document.getElementById(key); if(row) row.remove(); })
+    .catch(console.error);
+}
+</script>
+
+<script src="logout.js"></script>
+<script src="home.js"></script>
+<script src="book.js"></script>
+<script src="emp.js"></script>
+<script src="bill.js"></script>
+<script src="rep.js"></script>
+</body>
+</html>
